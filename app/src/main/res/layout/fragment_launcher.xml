@@ -14,16 +14,16 @@
         android:layout_height="wrap_content"
         android:text="LauncherFragment"
         app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintBottom_toTopOf="@+id/albumListButton"
+        app:layout_constraintBottom_toTopOf="@+id/searchButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/albumListButton"
+        android:id="@+id/searchButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="album list"
+        android:text="test search request"
         app:layout_constraintTop_toBottomOf="@id/text"
         app:layout_constraintBottom_toTopOf="@+id/detailButton" />
 
@@ -31,7 +31,7 @@
         android:id="@+id/detailButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/albumListButton"
+        app:layout_constraintTop_toBottomOf="@id/searchButton"
         android:text="detail"
         app:layout_constraintBottom_toBottomOf="parent" />
 
