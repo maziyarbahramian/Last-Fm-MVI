@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.launcher.LauncherFragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/artist_recyclerview"
+        android:id="@+id/launcher_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:listitem="@layout/list_item_artist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
