@@ -22,7 +22,7 @@ data class DataState<T>(
         ): DataState<T> {
             return DataState(
                 message = null,
-                loading = true,
+                loading = loading,
                 data = null
             )
         }
