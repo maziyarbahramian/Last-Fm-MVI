@@ -29,33 +29,15 @@ class LauncherFragment : BaseFragment(R.layout.fragment_launcher) {
 
     private val TAG = this::class.java.name
 
-//    private lateinit var viewModel: MainViewModel
-
     private lateinit var searchView: SearchView
 
-//    private lateinit var dataStateListener: DataStateListener
-
     private lateinit var launcherRecyclerAdapter: LauncherRecyclerAdapter
-
-/*
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_launcher, container, false)
-    }
-*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
         setHasOptionsMenu(true)
-
-     /*   viewModel = activity?.run {
-            ViewModelProvider(this).get(MainViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-*/
         initRecyclerView()
         subscribeObservers()
     }

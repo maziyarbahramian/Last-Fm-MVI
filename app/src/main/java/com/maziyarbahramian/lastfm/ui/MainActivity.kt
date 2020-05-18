@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.maziyarbahramian.lastfm.R
 import com.maziyarbahramian.lastfm.util.DataState
 import kotlinx.android.synthetic.main.activity_main.*
