@@ -10,7 +10,6 @@
         android:id="@+id/launcher_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        tools:listitem="@layout/list_item_artist" />
+        android:padding="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

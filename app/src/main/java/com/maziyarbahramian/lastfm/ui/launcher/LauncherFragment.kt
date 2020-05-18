@@ -8,12 +8,14 @@ import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.maziyarbahramian.lastfm.R
+import com.maziyarbahramian.lastfm.api.networkResponse.ArtistItem
 import com.maziyarbahramian.lastfm.ui.DataStateListener
 import com.maziyarbahramian.lastfm.ui.MainViewModel
 import com.maziyarbahramian.lastfm.ui.state.MainStateEvent
@@ -26,13 +28,13 @@ class LauncherFragment : Fragment() {
 
     private val TAG = this::class.java.name
 
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     private lateinit var searchView: SearchView
 
-    lateinit var dataStateListener: DataStateListener
+    private lateinit var dataStateListener: DataStateListener
 
-    lateinit var launcherRecyclerAdapter: LauncherRecyclerAdapter
+    private lateinit var launcherRecyclerAdapter: LauncherRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +52,7 @@ class LauncherFragment : Fragment() {
         viewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
+
         initRecyclerView()
         subscribeObservers()
     }
@@ -57,7 +60,7 @@ class LauncherFragment : Fragment() {
     private fun initRecyclerView() {
         launcher_recyclerview.apply {
             layoutManager = GridLayoutManager(activity, 2)
-            launcherRecyclerAdapter = LauncherRecyclerAdapter()
+            launcherRecyclerAdapter = LauncherRecyclerAdapter { item -> onArtistItemSelected(item) }
             adapter = launcherRecyclerAdapter
         }
     }
@@ -66,7 +69,6 @@ class LauncherFragment : Fragment() {
 
         viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
 
-            println("DEBUG: DataState: ${dataState}")
             dataStateListener.onDataStateChange(dataState)
 
             dataState.data?.let { event ->
@@ -81,7 +83,7 @@ class LauncherFragment : Fragment() {
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState.artistItems?.let {
-                println("DEBUG: Setting blog posts to RecyclerView: $it")
+                println("DEBUG: Setting artists to RecyclerView: $it")
                 launcherRecyclerAdapter.submitList(it)
             }
         })
@@ -119,8 +121,14 @@ class LauncherFragment : Fragment() {
         viewModel.setStateEvent(MainStateEvent.SearchArtistEvent(searchQuery))
     }
 
-    private fun navAlbumList() {
-        findNavController().navigate(R.id.action_launcherFragment_to_albumsListFragment)
+    private fun onArtistItemSelected(artistName: String) {
+        Log.d(TAG, "onArtistItemSelected: $artistName")
+        navAlbumList(artistName)
+    }
+
+    private fun navAlbumList(artistName: String) {
+        val bundle = bundleOf("artistName" to artistName)
+        findNavController().navigate(R.id.action_launcherFragment_to_albumsListFragment, bundle)
     }
 
     private fun navDetail() {
@@ -130,7 +138,6 @@ class LauncherFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-
             dataStateListener = context as DataStateListener
 
         } catch (e: ClassCastException) {

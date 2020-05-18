@@ -6,6 +6,10 @@ sealed class MainStateEvent {
         val artistName: String
     ) : MainStateEvent()
 
+    class GetTopAlbumsOfArtistEvent(
+        val artistName: String
+    ) : MainStateEvent()
+
     class None : MainStateEvent()
 
 }

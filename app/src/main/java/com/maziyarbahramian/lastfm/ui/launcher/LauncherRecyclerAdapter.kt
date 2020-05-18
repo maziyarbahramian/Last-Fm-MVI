@@ -9,9 +9,11 @@ import com.maziyarbahramian.lastfm.R
 import com.maziyarbahramian.lastfm.api.networkResponse.ArtistItem
 import kotlinx.android.synthetic.main.list_item_artist.view.*
 
-class LauncherRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LauncherRecyclerAdapter(
+    val onItemSelected: (String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val diffCallback = object : DiffUtil.ItemCallback<ArtistItem>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<ArtistItem>() {
         override fun areItemsTheSame(oldItem: ArtistItem, newItem: ArtistItem): Boolean {
             return oldItem.name.equals(newItem.name)
         }
@@ -70,13 +72,15 @@ class LauncherRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         }
     }
 
-    class ArtistViewHolder(
+    inner class ArtistViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(artist: ArtistItem) = with(itemView) {
             itemView.setOnClickListener {
-
+                artist.name?.let {
+                    onItemSelected(artist.name)
+                }
             }
 
             Glide.with(itemView.context)

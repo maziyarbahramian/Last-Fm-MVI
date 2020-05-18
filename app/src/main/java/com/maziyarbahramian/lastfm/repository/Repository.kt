@@ -3,6 +3,7 @@ package com.maziyarbahramian.lastfm.repository
 import androidx.lifecycle.LiveData
 import com.maziyarbahramian.lastfm.api.MyRetrofitBuilder
 import com.maziyarbahramian.lastfm.api.networkResponse.SearchResponse
+import com.maziyarbahramian.lastfm.api.networkResponse.TopAlbumsResponse
 import com.maziyarbahramian.lastfm.ui.state.MainViewState
 import com.maziyarbahramian.lastfm.util.ApiSuccessResponse
 import com.maziyarbahramian.lastfm.util.DataState
@@ -21,11 +22,26 @@ object Repository {
             }
 
             override fun createCall(): LiveData<GenericApiResponse<SearchResponse>> {
-                return MyRetrofitBuilder.apiService.searchArtist(
-                    "53b11ed135fadc65d64fa8e092584e5c",
-                    artistName
+                return MyRetrofitBuilder.apiService.searchArtist(artistName)
+            }
+        }.asLiveData()
+    }
+
+    fun getTopAlbumsOfArtist(artistName: String): LiveData<DataState<MainViewState>> {
+        return object : NetworkBoundResource<TopAlbumsResponse, MainViewState>() {
+
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<TopAlbumsResponse>) {
+                result.value = DataState.data(
+                    data = MainViewState(
+                        albumItems = response.body.topalbums?.album
+                    )
                 )
             }
+
+            override fun createCall(): LiveData<GenericApiResponse<TopAlbumsResponse>> {
+                return MyRetrofitBuilder.apiService.getTopAlbumsOfArtist(artistName)
+            }
+
         }.asLiveData()
     }
 }
