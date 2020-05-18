@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.maziyarbahramian.lastfm.R
 import com.maziyarbahramian.lastfm.api.networkResponse.ArtistItem
+import com.maziyarbahramian.lastfm.ui.BaseFragment
 import com.maziyarbahramian.lastfm.ui.DataStateListener
 import com.maziyarbahramian.lastfm.ui.MainViewModel
 import com.maziyarbahramian.lastfm.ui.state.MainStateEvent
@@ -24,24 +25,26 @@ import java.lang.ClassCastException
 import java.lang.Exception
 
 
-class LauncherFragment : Fragment() {
+class LauncherFragment : BaseFragment(R.layout.fragment_launcher) {
 
     private val TAG = this::class.java.name
 
-    private lateinit var viewModel: MainViewModel
+//    private lateinit var viewModel: MainViewModel
 
     private lateinit var searchView: SearchView
 
-    private lateinit var dataStateListener: DataStateListener
+//    private lateinit var dataStateListener: DataStateListener
 
     private lateinit var launcherRecyclerAdapter: LauncherRecyclerAdapter
 
+/*
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_launcher, container, false)
     }
+*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,10 +52,10 @@ class LauncherFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
         setHasOptionsMenu(true)
 
-        viewModel = activity?.run {
+     /*   viewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-
+*/
         initRecyclerView()
         subscribeObservers()
     }
@@ -133,15 +136,5 @@ class LauncherFragment : Fragment() {
 
     private fun navDetail() {
         findNavController().navigate(R.id.action_launcherFragment_to_detailFragment)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            dataStateListener = context as DataStateListener
-
-        } catch (e: ClassCastException) {
-            println("DEBUG: $context must implement DataStateListener.")
-        }
     }
 }

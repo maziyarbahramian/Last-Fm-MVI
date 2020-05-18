@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.maziyarbahramian.lastfm.R
+import com.maziyarbahramian.lastfm.ui.BaseFragment
 import com.maziyarbahramian.lastfm.ui.DataStateListener
 import com.maziyarbahramian.lastfm.ui.MainViewModel
 import com.maziyarbahramian.lastfm.ui.state.MainStateEvent
@@ -18,24 +19,13 @@ import kotlinx.android.synthetic.main.fragment_albums_list.*
 import java.lang.Exception
 
 
-class AlbumsListFragment : Fragment() {
+class AlbumsListFragment : BaseFragment(R.layout.fragment_albums_list) {
 
     private val TAG = this::class.java.name
-
-    private lateinit var viewModel: MainViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_albums_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +51,8 @@ class AlbumsListFragment : Fragment() {
     private fun subscribeObservers() {
 
         viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
-            // todo handle loader and message
+
+            dataStateListener.onDataStateChange(dataState)
 
             dataState.data?.let { event ->
 
