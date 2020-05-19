@@ -1,6 +1,7 @@
 package com.maziyarbahramian.lastfm.api
 
 import androidx.lifecycle.LiveData
+import com.maziyarbahramian.lastfm.api.networkResponse.AlbumInfoResponse
 import com.maziyarbahramian.lastfm.api.networkResponse.SearchResponse
 import com.maziyarbahramian.lastfm.api.networkResponse.TopAlbumsResponse
 import com.maziyarbahramian.lastfm.util.GenericApiResponse
@@ -18,5 +19,12 @@ interface ApiService {
     fun getTopAlbumsOfArtist(
         @Query("artist") artistName: String
     ): LiveData<GenericApiResponse<TopAlbumsResponse>>
+
+
+    @GET("?method=album.getinfo&format=json")
+    fun getAlbumInfo(
+        @Query("artist") artistName: String,
+        @Query("album") albumName: String
+    ): LiveData<GenericApiResponse<AlbumInfoResponse>>
 
 }

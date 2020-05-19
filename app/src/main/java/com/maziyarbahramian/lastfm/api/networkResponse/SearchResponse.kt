@@ -98,5 +98,8 @@ data class Attr(
     val totalPages: String? = null,
 
     @field:SerializedName("page")
-    val page: String? = null
+    val page: String? = null,
+
+    @field:SerializedName("rank")
+    val rank: String? = null
 )

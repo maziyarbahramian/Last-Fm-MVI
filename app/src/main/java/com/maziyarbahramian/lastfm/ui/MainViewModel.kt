@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.maziyarbahramian.lastfm.api.networkResponse.Album
 import com.maziyarbahramian.lastfm.api.networkResponse.AlbumItem
 import com.maziyarbahramian.lastfm.api.networkResponse.ArtistItem
 import com.maziyarbahramian.lastfm.repository.Repository
@@ -35,6 +36,9 @@ class MainViewModel : ViewModel() {
             is GetTopAlbumsOfArtistEvent -> {
                 Repository.getTopAlbumsOfArtist(stateEvent.artistName)
             }
+            is GetAlbumInfoEvent -> {
+                Repository.getAlbumInfo(stateEvent.artistName, stateEvent.albumName)
+            }
             is None -> {
                 AbsentLiveData.create()
             }
@@ -53,7 +57,13 @@ class MainViewModel : ViewModel() {
         _viewState.value = update
     }
 
-    fun getCurrentViewStateOrNew(): MainViewState {
+    fun setAlbumInfoData(albumInfo: Album) {
+        val update = getCurrentViewStateOrNew()
+        update.albumInfo = albumInfo
+        _viewState.value = update
+    }
+
+    private fun getCurrentViewStateOrNew(): MainViewState {
         return viewState.value?.let {
             it
         } ?: MainViewState()

@@ -15,7 +15,16 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right">
+            <argument
+                android:name="artistName"
+                android:defaultValue="unknownArtistName"
+                app:argType="string" />
+            <argument
+                android:name="albumName"
+                android:defaultValue="unknownAlbumName"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <fragment
@@ -32,8 +41,8 @@
             app:popExitAnim="@anim/slide_out_right">
             <argument
                 android:name="artistName"
-                app:argType="string"
-                android:defaultValue="unknownArtistName"/>
+                android:defaultValue="unknownArtistName"
+                app:argType="string" />
         </action>
         <action
             android:id="@+id/action_launcherFragment_to_detailFragment"

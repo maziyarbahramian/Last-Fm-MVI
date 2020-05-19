@@ -2,6 +2,7 @@ package com.maziyarbahramian.lastfm.repository
 
 import androidx.lifecycle.LiveData
 import com.maziyarbahramian.lastfm.api.MyRetrofitBuilder
+import com.maziyarbahramian.lastfm.api.networkResponse.AlbumInfoResponse
 import com.maziyarbahramian.lastfm.api.networkResponse.SearchResponse
 import com.maziyarbahramian.lastfm.api.networkResponse.TopAlbumsResponse
 import com.maziyarbahramian.lastfm.ui.state.MainViewState
@@ -44,4 +45,23 @@ object Repository {
 
         }.asLiveData()
     }
+
+    fun getAlbumInfo(artistName: String, albumName: String): LiveData<DataState<MainViewState>> {
+        return object : NetworkBoundResource<AlbumInfoResponse, MainViewState>() {
+
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<AlbumInfoResponse>) {
+                result.value = DataState.data(
+                    data = MainViewState(
+                        albumInfo = response.body.album
+                    )
+                )
+            }
+
+            override fun createCall(): LiveData<GenericApiResponse<AlbumInfoResponse>> {
+                return MyRetrofitBuilder.apiService.getAlbumInfo(artistName, albumName)
+            }
+
+        }.asLiveData()
+    }
+
 }

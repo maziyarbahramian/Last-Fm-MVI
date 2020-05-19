@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -44,7 +45,7 @@ class AlbumsListFragment : BaseFragment(R.layout.fragment_albums_list) {
         subscribeObservers()
 
         artistName?.let {
-            (activity as AppCompatActivity).supportActionBar?.title = artistName
+            (activity as AppCompatActivity).supportActionBar?.title = "Artist: $artistName"
             triggerGetTopAlbumsOfArtistEvent(it)
             Log.d(TAG, "argument from launcherFragment $it")
         }
@@ -95,11 +96,12 @@ class AlbumsListFragment : BaseFragment(R.layout.fragment_albums_list) {
 
     private fun onAlbumItemSelected(albumName: String, artistName: String) {
         Log.d(TAG, "onArtistItemSelected: $albumName, $artistName")
-        navDetail()
+        navDetail(albumName, artistName)
     }
 
-    private fun navDetail() {
-        findNavController().navigate(R.id.action_albumsListFragment_to_detailFragment)
+    private fun navDetail(albumName: String, artistName: String) {
+        val bundle = bundleOf("albumName" to albumName, "artistName" to artistName)
+        findNavController().navigate(R.id.action_albumsListFragment_to_detailFragment, bundle)
     }
 
 }
