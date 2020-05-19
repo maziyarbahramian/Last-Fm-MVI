@@ -11,7 +11,7 @@ data class AlbumInfoResponse(
 data class Tracks(
 
 	@field:SerializedName("track")
-	val track: List<TrackItem?>? = null
+	val track: List<TrackItem>? = null
 )
 
 data class Tags(
@@ -53,7 +53,7 @@ data class TrackItem(
 data class Album(
 
 	@field:SerializedName("image")
-	val image: List<ImageItem?>? = null,
+	val image: List<ImageItem>? = null,
 
 	@field:SerializedName("mbid")
 	val mbid: String? = null,

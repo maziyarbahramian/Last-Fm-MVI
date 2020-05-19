@@ -8,10 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 
 import com.maziyarbahramian.lastfm.R
+import com.maziyarbahramian.lastfm.api.networkResponse.Album
 import com.maziyarbahramian.lastfm.ui.BaseFragment
 import com.maziyarbahramian.lastfm.ui.state.MainStateEvent
+import com.maziyarbahramian.lastfm.util.SpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_detail.*
 
 class DetailFragment : BaseFragment(R.layout.fragment_detail) {
@@ -20,6 +24,7 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
 
     private var artistName: String? = null
     private var albumName: String? = null
+    private lateinit var trackRecyclerAdapter: TrackRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +42,6 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
         initRecyclerView()
         subscribeObservers()
 
-
         albumName?.let { albumName ->
             (activity as AppCompatActivity).supportActionBar?.title = "Album: $albumName"
             artistName?.let { artistName ->
@@ -48,7 +52,12 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
     }
 
     private fun initRecyclerView() {
-
+        tracks_recycler_view.apply {
+            layoutManager = LinearLayoutManager(activity)
+            addItemDecoration(SpacingItemDecoration(30))
+            trackRecyclerAdapter = TrackRecyclerAdapter()
+            adapter = trackRecyclerAdapter
+        }
     }
 
     private fun subscribeObservers() {
@@ -66,9 +75,24 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState.albumInfo?.let {
-                Log.d(TAG, "Setting album info to View: $it")
+                setDataToView(it)
             }
         })
+    }
+
+    private fun setDataToView(album: Album) {
+        trackRecyclerAdapter.submitList(album.tracks?.track!!)
+        Glide.with(view?.context!!)
+            .load(album.image?.get(2)?.text)
+            .into(album_img)
+        album_name_tv.text = album.name
+        album_artist_name_tv.text = album.artist
+
+        album_listener_tv.text =
+            getString(R.string.listeners).format(album.listeners?.toInt()?.div(1000.0))
+
+        album_play_count_tv.text =
+            getString(R.string.play_count).format(album.playcount?.toInt()?.div(1000.0))
     }
 
     private fun triggerGetAlbumInfoEvent(artistName: String, albumName: String) {
