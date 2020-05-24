@@ -1,16 +1,25 @@
 package com.maziyarbahramian.lastfm.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.maziyarbahramian.lastfm.api.MyRetrofitBuilder
 import com.maziyarbahramian.lastfm.api.networkResponse.AlbumInfoResponse
+import com.maziyarbahramian.lastfm.api.networkResponse.Artist
 import com.maziyarbahramian.lastfm.api.networkResponse.SearchResponse
 import com.maziyarbahramian.lastfm.api.networkResponse.TopAlbumsResponse
+import com.maziyarbahramian.lastfm.persistence.LastFmDao
 import com.maziyarbahramian.lastfm.ui.state.MainViewState
 import com.maziyarbahramian.lastfm.util.ApiSuccessResponse
 import com.maziyarbahramian.lastfm.util.DataState
 import com.maziyarbahramian.lastfm.util.GenericApiResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import com.maziyarbahramian.lastfm.model.Artist as DbArtist
 
-object Repository {
+class Repository(private val lastFmDao: LastFmDao) {
+
+    private val TAG = this::class.java.name
 
     fun searchArtist(artistName: String): LiveData<DataState<MainViewState>> {
         return object : NetworkBoundResource<SearchResponse, MainViewState>() {
@@ -63,5 +72,4 @@ object Repository {
 
         }.asLiveData()
     }
-
 }

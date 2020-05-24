@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity(), DataStateListener {
         }
     }
 
+    //hideSoftKeyboard
+
     private fun showProgressBar(isVisible: Boolean) {
         if (isVisible) {
             progress_bar.visibility = View.VISIBLE

@@ -1,12 +1,11 @@
 package com.maziyarbahramian.lastfm.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.maziyarbahramian.lastfm.api.networkResponse.Album
 import com.maziyarbahramian.lastfm.api.networkResponse.AlbumItem
 import com.maziyarbahramian.lastfm.api.networkResponse.ArtistItem
+import com.maziyarbahramian.lastfm.persistence.LastFmDatabase
 import com.maziyarbahramian.lastfm.repository.Repository
 import com.maziyarbahramian.lastfm.ui.state.MainStateEvent
 import com.maziyarbahramian.lastfm.ui.state.MainStateEvent.*
@@ -14,7 +13,15 @@ import com.maziyarbahramian.lastfm.ui.state.MainViewState
 import com.maziyarbahramian.lastfm.util.AbsentLiveData
 import com.maziyarbahramian.lastfm.util.DataState
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository: Repository
+
+    init {
+        val lastFmDao = LastFmDatabase.getDatabase(application).getDao()
+        repository = Repository(lastFmDao)
+    }
+
     private val _stateEvent: MutableLiveData<MainStateEvent> = MutableLiveData()
     private val _viewState: MutableLiveData<MainViewState> = MutableLiveData()
 
@@ -31,13 +38,13 @@ class MainViewModel : ViewModel() {
     private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>> {
         return when (stateEvent) {
             is SearchArtistEvent -> {
-                Repository.searchArtist(stateEvent.artistName)
+                repository.searchArtist(stateEvent.artistName)
             }
             is GetTopAlbumsOfArtistEvent -> {
-                Repository.getTopAlbumsOfArtist(stateEvent.artistName)
+                repository.getTopAlbumsOfArtist(stateEvent.artistName)
             }
             is GetAlbumInfoEvent -> {
-                Repository.getAlbumInfo(stateEvent.artistName, stateEvent.albumName)
+                repository.getAlbumInfo(stateEvent.artistName, stateEvent.albumName)
             }
             is None -> {
                 AbsentLiveData.create()

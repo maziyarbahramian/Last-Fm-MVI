@@ -13,8 +13,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType> {
 
         GlobalScope.launch(Dispatchers.IO) {
 
-            delay(1000L
-            )
+            delay(1000L)
             withContext(Dispatchers.Main) {
                 val apiResponse = createCall()
 
